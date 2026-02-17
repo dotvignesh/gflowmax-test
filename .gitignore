@@ -1,0 +1,4 @@
+
+# Exclude oversized binaries from GitHub history
+mol_opt/main/molpal/libraries/Enamine50k.h5
+mol_opt/main/smiles_lstm_hc/pretrained_model/model_final_0.473.pt
