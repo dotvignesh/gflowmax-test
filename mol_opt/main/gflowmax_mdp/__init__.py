@@ -1,0 +1,2 @@
+"""GFlowMax-MDP benchmark method."""
+

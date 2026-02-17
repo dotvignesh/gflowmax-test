@@ -1,0 +1,28 @@
+num_episodes: 200000
+max_steps_per_episode: 40
+min_steps_before_noop: 2
+treat_noop_as_terminal: true
+score_nonterminal_steps: false
+init_mol: C
+atom_types: [C, O, N]
+discount_factor: 0.9
+allow_removal: true
+allow_no_modification: true
+allow_bonds_between_rings: false
+allowed_ring_sizes: [5, 6]
+
+learning_rate: 0.05
+epsilon: 0.5
+epsilon_min: 0.05
+epsilon_decay: 0.9995
+replay_buffer_size: 20000
+batch_size: 128
+tau: 0.01
+priority_epsilon: 0.000001
+
+beta_init: 1.0
+beta_rate: 0.01
+beta_max: 25.0
+r_min: 0.0001
+
+log_frequency: 100

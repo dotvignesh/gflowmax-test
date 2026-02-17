@@ -1,0 +1,18 @@
+name: gflowmax
+method: random
+metric:
+  goal: maximize
+  name: avg_auc
+parameters:
+  learning_rate:
+    values: [0.01, 0.02, 0.05, 0.1]
+  beta_rate:
+    values: [0.002, 0.005, 0.01, 0.02]
+  tau:
+    values: [0.005, 0.01, 0.02]
+  epsilon_decay:
+    values: [0.999, 0.9995, 0.9998]
+  batch_size:
+    values: [64, 128, 256]
+  min_steps_before_noop:
+    values: [0, 1, 2, 4]

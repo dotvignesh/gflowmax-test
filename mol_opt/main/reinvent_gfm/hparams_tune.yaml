@@ -1,0 +1,26 @@
+name: reinvent_gfm
+method: grid
+metric:
+  goal: maximize
+  name: avg_auc
+parameters:
+  learning_rate: 
+    values: [0.0005, 0.0001]
+  batch_size:
+    values: [64, 128]
+  sigma: 
+    values: [300, 500]
+  objective_mix_lambda:
+    values: [0.4, 0.6, 0.8]
+  objective_mode:
+    values: ["hybrid", "reinvent_only", "flow_only"]
+  reinvent_loss_coef:
+    values: [0.5, 1.0]
+  flow_loss_coef:
+    values: [1.0, 2.0, 4.0]
+  beta_rate:
+    values: [0.004, 0.008, 0.012]
+  flow_target_tau:
+    values: [0.005, 0.01]
+  priority_alpha:
+    values: [0.7, 1.0]
