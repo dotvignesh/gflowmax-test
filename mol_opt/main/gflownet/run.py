@@ -24,6 +24,7 @@ if path_main not in sys.path:
 from mol_mdp_ext import MolMDPExtended, BlockMoleculeDataExtended
 import model_atom, model_block, model_fingerprint
 from rdkit import rdBase
+rdBase.DisableLog('rdApp.warning')
 rdBase.DisableLog('rdApp.error')
 
 from main.optimizer import BaseOptimizer, Objdict
@@ -299,7 +300,11 @@ class GFlowNet_Optimizer(BaseOptimizer):
         config = Objdict(config)
 
         bpath = os.path.join(path_here, 'data/blocks_PDB_105.json')
-        device = torch.device('cuda')
+        requested_cuda = getattr(self.args, "cuda", "auto")
+        if isinstance(requested_cuda, str) and requested_cuda.lower() == "cpu":
+            device = torch.device("cpu")
+        else:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         do_save = False
 
         if config.floatX == 'float32':
@@ -317,7 +322,6 @@ class GFlowNet_Optimizer(BaseOptimizer):
         model.to(device)
         
         debug_no_threads = False
-        device = torch.device('cuda')
 
         ##### target_model 
         tau = config.bootstrap_tau

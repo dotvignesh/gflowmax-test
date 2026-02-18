@@ -5,9 +5,12 @@ import torch
 import numpy as np
 from rdkit import Chem
 from rdkit.Chem import Draw
+from rdkit import RDLogger
 import tdc
 from tdc.generation import MolGen
 from main.utils.chem import *
+
+RDLogger.DisableLog("rdApp.warning")
 
 
 class Objdict(dict):
@@ -83,6 +86,8 @@ class Oracle:
         self.diversity_evaluator = tdc.Evaluator(name = 'Diversity')
         self.last_log = 0
         self._metric_warning_printed = False
+        # Per-method switch: when True, AUC logs are normalized by observed oracle calls.
+        self.normalize_auc_to_observed = False
 
     @property
     def budget(self):
@@ -105,7 +110,9 @@ class Oracle:
         with open(output_file_path, 'w') as f:
             yaml.dump(self.mol_buffer, f, sort_keys=False)
 
-    def log_intermediate(self, mols=None, scores=None, finish=False, normalize_auc_to_observed=False):
+    def log_intermediate(self, mols=None, scores=None, finish=False, normalize_auc_to_observed=None):
+        if normalize_auc_to_observed is None:
+            normalize_auc_to_observed = self.normalize_auc_to_observed
 
         if finish:
             temp_top100 = list(self.mol_buffer.items())[:100]
@@ -301,7 +308,7 @@ class BaseOptimizer:
     def sort_buffer(self):
         self.oracle.sort_buffer()
     
-    def log_intermediate(self, mols=None, scores=None, finish=False, normalize_auc_to_observed=False):
+    def log_intermediate(self, mols=None, scores=None, finish=False, normalize_auc_to_observed=None):
         self.oracle.log_intermediate(
             mols=mols,
             scores=scores,

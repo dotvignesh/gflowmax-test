@@ -1,0 +1,8 @@
+learning_rate: 0.0005
+batch_size: 64
+sigma: 500
+experience_replay: 24
+seed_results_yaml: ""
+seed_top_k: 200
+seed_min_score: 0.0
+seed_batch_size: 256

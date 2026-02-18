@@ -8,3 +8,17 @@ parameters:
     values: [0.001, 0.0001, 0.0005]
   batch_size:
     values: [32, 64, 128]
+  onpolicy_batch_N:
+    values: [32, 64]
+  weight_temp_start:
+    values: [1.5, 2.0]
+  weight_temp_end:
+    values: [4.0, 6.0]
+  ga_mix_ratio:
+    values: [0.25, 0.5]
+  replay_blend_ratio:
+    values: [0.2, 0.3, 0.4]
+  beta_init:
+    values: [20, 50]
+  gamma_z:
+    values: [0.01, 0.05]

@@ -1,10 +1,35 @@
 learning_rate: 0.0005
 batch_size: 64
 num_keep: 1024
+# Deprecated for optimization logic; retained for backward compatibility defaults.
 experience_loop: 8
+# Deprecated for optimization logic; retained for backward compatibility defaults.
 experience_replay: 64
 lr_z: 0.1
 beta: 50
+beta_init: 50
+beta_rate: 0.005
+beta_max: 60
+gamma_z: 0.01
+onpolicy_batch_N: 64
+weight_temp: 5.0
+weight_temp_start: 1.5
+weight_temp_end: 3.0
+weight_temp_ramp_steps: 1000
+ga_mix_ratio: 0.35
+adaptive_ga_mix: false
+ga_mix_min: 0.2
+ga_mix_max: 0.8
+ga_mix_step: 0.05
+ga_mix_patience: 3
+replay_blend_ratio: 0.15
+replay_batch_size: 64
+replay_start_step: 300
+replay_ramp_steps: 1000
+min_reward: 1.0e-8
+reward_transform: linear
+policy_ema_alpha: 0.05
+onpolicy_updates_per_step: 1
 mutation_rate: 0.01
 population_size: 64
 offspring_size: 8

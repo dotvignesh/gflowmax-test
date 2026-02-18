@@ -6,12 +6,27 @@ import os
 import sys
 sys.path.append(os.path.realpath(__file__))
 
+from rdkit import RDLogger
+RDLogger.DisableLog("rdApp.warning")
+
 # TDC on some versions expects rdkit.six, removed in newer RDKit builds.
 try:
     import rdkit.six  # noqa: F401
 except Exception:
     import six as _six
     sys.modules["rdkit.six"] = _six
+
+
+def _install_sklearn_pickle_compat():
+    """Provide legacy sklearn module paths used by old pickles."""
+    try:
+        import sklearn.svm._classes as _svm_classes
+        sys.modules.setdefault("sklearn.svm.classes", _svm_classes)
+    except Exception:
+        pass
+
+
+_install_sklearn_pickle_compat()
 
 from tdc import Oracle
 from time import time 
@@ -78,6 +93,10 @@ def main(method,oracle_name):
     method_aliases = {
         "gflowmax-mdp": "gflowmax_mdp",
         "reinvent-gfm": "reinvent_gfm",
+        "reinvent-seeded": "reinvent_gflownet_seeded",
+        "reinvent_seeded": "reinvent_gflownet_seeded",
+        "reinvent-transformer-seeded": "reinvent_transformer_seeded",
+        "reinvent_transformer_seeded": "reinvent_transformer_seeded",
         "genetic-gfn": "genetic_gfn",
         "genetic-gfn-selfies": "genetic_gfn_selfies",
         "genetic-gfn-al": "genetic_gfn_al",
@@ -152,6 +171,8 @@ def main(method,oracle_name):
         from main.gflownet.run import GFlowNet_Optimizer as Optimizer
     elif args.method == 'gflownet_al':
         from main.gflownet_al.run import GFlowNet_AL_Optimizer as Optimizer
+    elif args.method == 'gflownet_gfm':
+        from main.gflownet_gfm.run import GFlowNet_Optimizer as Optimizer
     elif args.method == 'gflowmax':
         from main.gflowmax.run import GFlowMax_Optimizer as Optimizer
     elif args.method == 'gflowmax_mdp':
@@ -160,8 +181,12 @@ def main(method,oracle_name):
         from main.moldqn.run import MolDQN_Optimizer as Optimizer
     elif args.method == 'reinvent':
         from main.reinvent.run import REINVENT_Optimizer as Optimizer
+    elif args.method == 'reinvent_gflownet_seeded':
+        from main.reinvent_gflownet_seeded.run import REINVENT_Optimizer as Optimizer
     elif args.method == 'reinvent_transformer':
         from main.reinvent_transformer.run_transformer import REINVENT_Optimizer as Optimizer
+    elif args.method == 'reinvent_transformer_seeded':
+        from main.reinvent_transformer_seeded.run_transformer import REINVENT_Optimizer as Optimizer
     elif args.method == 'reinvent_selfies':
         from main.reinvent_selfies.run import REINVENT_SELFIES_Optimizer as Optimizer
     elif args.method == 'genetic_gfn':
@@ -244,13 +269,5 @@ def main(method,oracle_name):
 
 
 if __name__ == "__main__":
-    for oracle_name in ["Albuterol_Similarity", "Amlodipine_MPO", 
-                        "Celecoxib_Rediscovery", "Deco_Hop", "DRD2", 
-                        "Fexofenadine_MPO", "GSK3B", "Isomers_C7H8N2O2",
-                        "Isomers_C7H8N2O3", "Isomers_C9H10N2O2PF2Cl", "JNK3",
-                        "Median 1", "Median 2", "Mestranol_Similarity", 
-                        "Osimertinib_MPO", "Perindopril_MPO", "QED", "Ranolazine_MPO",
-                        "Scaffold_Hop", "Sitagliptin_MPO", "Thiothixene_Rediscovery", 
-                        "Troglitazone_Rediscovery", "Valsartan_Smarts", "Zaleplon_MPO"]: #["Zaleplon_MPO","Amlodipine_MPO","GSK3B"]:#["Thiothixene_Rediscovery","Troglitazone_Rediscovery","Valsartan_Smarts","Zaleplon_MPO","Amlodipine_MPO","GSK3B"]:
-        for method in ["reinvent_transformer","reinvent"]:
-            main(method,oracle_name)
+    # Run once; CLI args override these defaults.
+    main("reinvent", "QED")
